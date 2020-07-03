@@ -5,7 +5,7 @@
 class Solution {
 
     public boolean solution(int x) {
-        System.out.println("헬로 월드!");
+        System.out.println("hello world!");
         return true;
     }
 }
