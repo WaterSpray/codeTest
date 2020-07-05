@@ -5,7 +5,22 @@
 class Solution {
 
     public boolean solution(int x) {
-        System.out.println("hello world!");
-        return true;
+
+        int sum = sumOfDigit(x);
+
+        return x % sum == 0;
     }
+
+    private int sumOfDigit(int x) {
+
+        int sum = 0;
+
+        while (x > 0) {
+            sum += x % 10;
+            x /= 10;
+        }
+
+        return sum;
+    }
+
 }
