@@ -5,7 +5,24 @@
 class Solution {
 
     public int solution(int n) {
-        int answer = 0;
-        return answer;
+
+        int nCount = countOne(n);
+
+        while (countOne(++n) != nCount) {
+        }
+
+        return n;
     }
+
+    private int countOne(int n) {
+
+        int count = 0;
+        while (n > 0) {
+            count += n & 1;
+            n = n >>> 1;
+        }
+
+        return count;
+    }
+
 }
