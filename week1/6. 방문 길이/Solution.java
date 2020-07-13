@@ -7,44 +7,40 @@ import java.util.List;
     https://programmers.co.kr/learn/courses/30/lessons/49994
 */
 class Solution6 {
-
     public static void main(String[] args) {
 
-        String dirs = "ULURRDLLU";
-
+        String dirs = "LULLLLLLU";
         System.out.println(solution(dirs));
     }
 
     public static int solution(String dirs) {
 
-        List<Position> visitedList = new ArrayList<>();
-        int exceptCount = 0;
-        Position currentPosition = new Position(0, 0);
-        visitedList.add(new Position(0, 0));
+        Position currentPosition = new Position(0, 0, 0, 0);
+        List<Position> visitedPositions = new ArrayList<>();
 
         for (String direction : dirs.split("")) {
 
             switch (direction) {
                 case "U":
-                    if (currentPosition.getY() >= 5) {
+                    if (currentPosition.getCurrentY() >= 5) {
                         break;
                     }
                     currentPosition.addY(1);
                     break;
                 case "D":
-                    if (currentPosition.getY() <= -5) {
+                    if (currentPosition.getCurrentY() <= -5) {
                         break;
                     }
                     currentPosition.addY(-1);
                     break;
                 case "R":
-                    if (currentPosition.getX() >= 5) {
+                    if (currentPosition.getCurrentX() >= 5) {
                         break;
                     }
                     currentPosition.addX(1);
                     break;
                 case "L":
-                    if (currentPosition.getX() <= -5) {
+                    if (currentPosition.getCurrentX() <= -5) {
                         break;
                     }
                     currentPosition.addX(-1);
@@ -53,72 +49,84 @@ class Solution6 {
                     break;
             }
 
-            Position newPosition = new Position(currentPosition.getX(), currentPosition.getY());
+            Position nowPosition = currentPosition.positionFactory();
 
-            System.out.println(newPosition.toString());
-
-            if (!visitedList.contains(newPosition)) {
-                visitedList.add(newPosition);
+            if (!visitedPositions.contains(nowPosition)) {
+                visitedPositions.add(nowPosition);
             }
 
         }
 
-        // for (Position position : visitedList) {
-        // if (position.getX() >= -5 || position.getX() >= 5 || position.getY() >= -5 ||
-        // position.getY() >= 5) {
-        // ignoreSection++;
-        // }
-        // }
-
-        System.out.println(visitedList.toString());
-
-        return visitedList.size() + exceptCount;
+        return visitedPositions.size();
     }
-
 }
 
 class Position {
 
-    private int x;
-    private int y;
+    private int beforeX;
+    private int beforeY;
+    private int currentX;
+    private int currentY;
 
-    public Position(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Position(int beforeX, int beforeY, int currentX, int currentY) {
+        this.beforeX = beforeX;
+        this.beforeY = beforeY;
+        this.currentX = currentX;
+        this.currentY = currentY;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public int getBeforeX() {
+        return this.beforeX;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public int getBeforeY() {
+        return this.beforeY;
+    }
+
+    public int getCurrentX() {
+        return this.currentX;
+    }
+
+    public int getCurrentY() {
+        return this.currentY;
     }
 
     public void addX(int x) {
-        this.x += x;
+        this.beforeX = this.currentX;
+        this.beforeY = this.currentY;
+        this.currentX += x;
     }
 
     public void addY(int y) {
-        this.y += y;
+        this.beforeX = this.currentX;
+        this.beforeY = this.currentY;
+        this.currentY += y;
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
+    public Position positionFactory() {
+        return new Position(this.beforeX, this.beforeY, this.currentX, this.currentY);
     }
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof Position) && ((Position) obj).getX() == this.getX()
-                && ((Position) obj).getY() == this.getY();
+
+        if (obj instanceof Position && ((Position) obj).getBeforeX() == this.beforeX
+                && ((Position) obj).getBeforeY() == this.beforeY && ((Position) obj).getCurrentX() == this.currentX
+                && ((Position) obj).getCurrentY() == this.currentY) {
+            return true;
+        }
+
+        if (obj instanceof Position && ((Position) obj).getBeforeX() == this.currentX
+                && ((Position) obj).getBeforeY() == this.currentY && ((Position) obj).getCurrentX() == this.beforeX
+                && ((Position) obj).getCurrentY() == this.beforeY) {
+            return true;
+        }
+
+        return false;
     }
 
     @Override
     public String toString() {
-        return "[" + this.x + ":" + this.y + "]";
+        return "" + this.beforeX + ":" + this.beforeY + "[]" + this.currentX + ":" + this.currentY;
     }
 }
